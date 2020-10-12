@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
-use App\Models\Post;
+use App\Models\{Category, Post, Tag};
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 
@@ -25,7 +25,12 @@ class PostController extends Controller
 
     public function create()
     {
-        return view('posts.create', ['post' => new Post, 'submit' => 'Create']);
+        return view('posts.create', [
+            'post' => new Post, 
+            'submit' => 'Create',
+            'categories' => Category::get(),
+            'tags' => Tag::get()
+        ]);
     }
 
     public function store(PostRequest $request)
@@ -47,9 +52,12 @@ class PostController extends Controller
         
         // Assign title to the slug
         $attr['slug'] = \Str::slug(request('title'), '-');
+        $attr['category_id'] = request('category');
 
         // Create New Post
-        Post::create($attr);
+        $post = Post::create($attr);
+
+        $post->tags()->attach(request('tags'));
 
         session()->flash('success', 'The post was created');
         // session()->flash('error', 'The post was created');

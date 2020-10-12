@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ Route::get('/test', function () {
 });
 
 Route::get('categories/{category:slug}', [CategoryController::class, 'index']);
+Route::get('tags/{tag:slug}', [TagController::class, 'index']);
 
 Route::get('post', [PostController::class, 'index']);
 
